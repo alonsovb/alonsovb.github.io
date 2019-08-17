@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <h1>Websocket status</h1>
+    <div class="messages"></div>
+    <form action="javascript:void(0)">
+        <label for="message">&gt;</label>
+        <input type="text" id="message" required autofocus />
+    </form>
+<!----<script src="ws-client.js"></script>-->
+<script>
+const ws = new WebSocket('ws://186.15.112.26:3000');
+
+ws.onopen = () => {
+    setTitle('Connected');
+};
+
+ws.onclose = () => {
+    setTitle('Disconnected');
+}
+
+ws.onmessage = (message) => {
+    printMessage(message.data);
+};
+
+document.forms[0].onsubmit = () => {
+    const input = document.getElementById('message');
+    ws.send(input.value);
+    input.value = '';
+
+};
+
+function setTitle(title) {
+    document.querySelector('h1').innerHTML = title;
+}
+
+function printMessage(message) {
+    const p = document.createElement('p');
+    p.innerText = message;
+    document.querySelector('div.messages').appendChild(p);
+}
+</script>
+</body>
+</html>
